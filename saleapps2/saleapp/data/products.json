@@ -1,0 +1,37 @@
+[
+  {
+    "id": 1,
+    "name": "Iphone 13 ProMax",
+    "price": 23000000,
+    "image": "https://res.cloudinary.com/dy1unykph/image/upload/v1729842193/iPhone_15_Pro_Natural_1_ltf9vr.webp",
+    "category_id": 1
+  },
+  {
+    "id": 1,
+    "name": "Iphone 15",
+    "price": 23000000,
+    "image": "https://res.cloudinary.com/dy1unykph/image/upload/v1729842193/iPhone_15_Pro_Natural_1_ltf9vr.webp",
+    "category_id": 1
+  },
+  {
+    "id": 1,
+    "name": "Iphone 16",
+    "price": 23000000,
+    "image": "https://res.cloudinary.com/dy1unykph/image/upload/v1729842193/iPhone_15_Pro_Natural_1_ltf9vr.webp",
+    "category_id": 1
+  },
+  {
+    "id": 1,
+    "name": "Samsung Galaxy",
+    "price": 23000000,
+    "image": "https://res.cloudinary.com/dy1unykph/image/upload/v1729842193/iPhone_15_Pro_Natural_1_ltf9vr.webp",
+    "category_id": 1
+  },
+  {
+    "id": 1,
+    "name": "Iphone 13 ProMax",
+    "price": 23000000,
+    "image": "https://res.cloudinary.com/dy1unykph/image/upload/v1729842193/iPhone_15_Pro_Natural_1_ltf9vr.webp",
+    "category_id": 1
+  }
+]
