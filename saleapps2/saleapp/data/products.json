@@ -1,37 +1,41 @@
-[
-  {
-    "id": 1,
-    "name": "Iphone 13 ProMax",
-    "price": 23000000,
-    "image": "https://res.cloudinary.com/dy1unykph/image/upload/v1729842193/iPhone_15_Pro_Natural_1_ltf9vr.webp",
-    "category_id": 1
-  },
-  {
-    "id": 1,
-    "name": "Iphone 15",
-    "price": 23000000,
-    "image": "https://res.cloudinary.com/dy1unykph/image/upload/v1729842193/iPhone_15_Pro_Natural_1_ltf9vr.webp",
-    "category_id": 1
-  },
-  {
-    "id": 1,
-    "name": "Iphone 16",
-    "price": 23000000,
-    "image": "https://res.cloudinary.com/dy1unykph/image/upload/v1729842193/iPhone_15_Pro_Natural_1_ltf9vr.webp",
-    "category_id": 1
-  },
-  {
-    "id": 1,
-    "name": "Samsung Galaxy",
-    "price": 23000000,
-    "image": "https://res.cloudinary.com/dy1unykph/image/upload/v1729842193/iPhone_15_Pro_Natural_1_ltf9vr.webp",
-    "category_id": 1
-  },
-  {
-    "id": 1,
-    "name": "Iphone 13 ProMax",
-    "price": 23000000,
-    "image": "https://res.cloudinary.com/dy1unykph/image/upload/v1729842193/iPhone_15_Pro_Natural_1_ltf9vr.webp",
-    "category_id": 1
-  }
-]
+[{
+  "id": 1,
+  "name": "Iphone 16 ProMax",
+  "price": "30000000",
+  "image": "https://res.cloudinary.com/dy1unykph/image/upload/v1729842193/iPhone_15_Pro_Natural_1_ltf9vr.webp",
+  "category_id": 1
+},
+{
+  "id": 2,
+  "name": "Iphone 13",
+  "price": "17500000",
+  "image": "https://res.cloudinary.com/dy1unykph/image/upload/v1729091944/refurb-iphone-13-pro-max-blue-2023_tuhb2j.jpg",
+  "category_id": 1
+},
+{
+  "id": 3,
+  "name": "Galaxy Z-fold",
+  "price": "26000000",
+  "image": "https://res.cloudinary.com/dy1unykph/image/upload/v1729091967/419VTYVRD1L._AC__vih8qs.jpg",
+  "category_id": 1
+},
+{
+  "id": 4,
+  "name": "Iphone 15",
+  "price": "25000000",
+  "image": "https://res.cloudinary.com/dy1unykph/image/upload/v1729842193/iPhone_15_Pro_Natural_1_ltf9vr.webp",
+  "category_id": 1
+},
+{
+  "id": 5,
+  "name": "Iphone 14",
+  "price": "22000000",
+  "image": "https://res.cloudinary.com/dy1unykph/image/upload/v1729091915/refurb-iphone-14-pro-spaceblack-202404_zrfqfz.jpg",
+  "category_id": 1
+}, {
+  "id": 6,
+  "name": "Samsung Galaxy Tab A9",
+  "price": "22000000",
+  "image": "https://res.cloudinary.com/dy1unykph/image/upload/v1730442354/levant-feature-galaxy-tab-a9---tab-a9--538804308_oovpde.jpg",
+  "category_id": 2
+}]

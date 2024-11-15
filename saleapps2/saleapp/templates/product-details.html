@@ -1,10 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<h1>CHI TIET SAN PHAM!</h1>
-</body>
-</html>
+{%extends 'layout/base.html'%}
+
+{%block title%} Chi tiết sản phẩm{%endblock%}
+
+{%block content%}
+
+<div class="row">
+    <div class="col-md-5 col-12">
+        <img src="{{product.image}}" class="img-fluid rounded"/>
+    </div>
+    <div class="col-md-7 col-12">
+        <h1 class="text-info">{{product.name}}</h1>
+        <h3 class="text-danger">{{product.price}}</h3>
+    </div>
+</div>
+
+
+{%endblock%}
