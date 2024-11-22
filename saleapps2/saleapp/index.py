@@ -1,3 +1,5 @@
+import math
+
 from flask import render_template, request, redirect
 import dao
 from saleapp import app
@@ -7,8 +9,10 @@ from saleapp import app
 def index():
     q = request.args.get("q")
     cate_id = request.args.get("category_id")
-    products = dao.load_products(q=q, cate_id=cate_id)
-    return render_template('index.html', products=products)
+    page = request.args.get("page")
+    products = dao.load_products(q=q, cate_id=cate_id, page=page)
+    pages = dao.count_product()
+    return render_template('index.html', products=products, pages=math.ceil(pages/app.config["PAGE_SIZE"]))
 
 
 @app.route('/products/<int:id>')
@@ -19,13 +23,17 @@ def details(id):
 
 @app.route('/login', methods=['get', 'post'])
 def login_my_user():
+    err_msg = None
     if request.method.__eq__('POST'):
         username = request.form.get('username')
         password = request.form.get('password')
-        if username.__eq__("admin") and password.__eq__("123"):
+        user = dao.auth_user(username=username, password=password)
+        if user:
             return redirect('/')
+        else:
+            err_msg = "Tài khoản hoặc mật khẩu không đúng!"
 
-    return render_template('login.html')
+    return render_template('login.html', err_msg=err_msg)
 
 
 @app.context_processor
