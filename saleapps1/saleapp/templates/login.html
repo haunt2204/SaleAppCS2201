@@ -1,8 +1,12 @@
 {%extends 'layout/base.html'%}
 
+{%block title%} Đăng nhập {%endblock%}
 
 {%block content%}
 <h1 class="text-center text-info mt-1">ĐĂNG NHẬP</h1>
+{%if err_msg%}
+<div class="alert alert-danger">{{err_msg}}</div>
+{%endif%}
 <form method="post" action="/login">
     <div class="form-floating mb-3 mt-3">
         <input type="text" class="form-control" id="username" placeholder="Nhập tài khoản" name="username" pattern="[A-Za-z0-9]*" required>

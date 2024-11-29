@@ -1,6 +1,7 @@
 import json
 import hashlib
 from models import *
+from saleapp import db
 
 
 def load_categories():
@@ -9,7 +10,7 @@ def load_categories():
     return Category.query.all()
 
 
-def load_products(q=None, cate_id=None):
+def load_products(q=None, cate_id=None, page=None):
     # with open('data/products.json', encoding='utf-8') as f:
     #     products = json.load(f)
     #     if q:
@@ -25,7 +26,26 @@ def load_products(q=None, cate_id=None):
     if cate_id:
         query = query.filter(Product.category_id.__eq__(cate_id))
 
+    if page:
+        page_size = app.config['PAGE_SIZE']
+        start = (int(page)-1)*page_size
+        query = query.slice(start, start+page_size)
+
     return query.all()
+
+
+def add_user(name, username, password, avatar):
+    password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
+    u = None
+    if avatar:
+        u = User(name=name, username=username, password=password, avatar=avatar)
+    else:
+        u = User(name=name, username=username, password=password)
+    db.session.add(u)
+    db.session.commit()
+
+def count_products():
+    return Product.query.count()
 
 
 def auth_user(username, password):
@@ -34,6 +54,10 @@ def auth_user(username, password):
 
     return User.query.filter(User.username.__eq__(username),
                              User.password.__eq__(password)).first()
+
+
+def get_user_by_id(user_id):
+    return User.query.get(user_id)
 
 
 def load_product_by_id(id):
