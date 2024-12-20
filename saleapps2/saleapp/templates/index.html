@@ -1,7 +1,6 @@
 {%extends 'layout/base.html'%}
 
 
-
 {%block content%}
 {%if pages>1%}
 <ul class="pagination mt-1">
@@ -19,7 +18,7 @@
                 <h4 class="card-title">{{p.name}}</h4>
                 <p class="card-text">{{p.price}}</p>
                 <a href="/products/{{p.id}}" class="btn btn-primary">Xem chi tiết</a>
-                <a href="#" class="btn btn-danger">Đặt hàng</a>
+                <a href="javascript:;" onclick="addToCart({{p.id}}, '{{p.name}}', {{p.price}})" class="btn btn-danger">Đặt hàng</a>
             </div>
         </div>
 
