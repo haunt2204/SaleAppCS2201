@@ -13,6 +13,27 @@
         <h3 class="text-danger">{{product.price}}</h3>
     </div>
 </div>
+<div class="mt-2 mb-2">
+    <div class="form-floating">
+        <textarea class="form-control" id="content" name="text" placeholder="Nội dung bình luận"></textarea>
+        <label for="content">Nội dung bình luận</label>
+    </div>
+    <button class="btn btn-success mt-2" onclick="addComment({product.id})">Bình luận</button>
+</div>
+
+
+<ul class="list-group">
+    <div class="row">
+        <div class="col-md-1 md-4">
+            <img class="img-fluid rounded-circle" src="https://res.cloudinary.com/dy1unykph/image/upload/v1729842193/iPhone_15_Pro_Natural_1_ltf9vr.webp">
+        </div>
+        <div class="col-md-11 md-8">
+            <p>Good</p>
+            <p>2024-12-24 15:12:00</p>
+        </div>
+    </div>
+</ul>
+
 
 
 {%endblock%}

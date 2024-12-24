@@ -1,5 +1,5 @@
 import math
-from flask_login import login_user, current_user, logout_user
+from flask_login import login_user, current_user, logout_user, login_required
 from flask import render_template, request, redirect, session, jsonify
 import dao, utils
 from saleapp import app, admin, login
@@ -53,11 +53,13 @@ def login_my_user():
         user = dao.auth_user(username=username, password=password)
         if user:
             login_user(user)
-            return redirect('/')
+            next = request.args.get('next')
+            return redirect(next if next else '/')
         else:
             err_msg = "Tài khoản hoặc mật khẩu không đúng!"
 
     return render_template('login.html', err_msg=err_msg)
+
 
 @app.route('/login-admin', methods=['post'])
 def process_login_admin():
@@ -93,6 +95,49 @@ def cart():
 @login.user_loader
 def load_user(user_id):
     return dao.get_user_by_id(user_id=user_id)
+
+
+@app.route("/api/pay", methods=['post'])
+@login_required
+def pay():
+    cart = session['cart']
+    try:
+        dao.add_receipt(cart=cart)
+    except Exception as ex:
+        print(ex)
+        return jsonify({'status': 500})
+    else:
+        del session['cart']
+        return jsonify({'status': 200})
+
+
+@app.route('/api/products/<int:id>/comments', methods=['post'])
+@login_required
+def add_comment(id):
+    data = request.json
+    c = dao.add_comment(content=data.get('content'), product_id=id)
+
+    return jsonify({'id': c.id, 'content': c.content, 'product_id': c.product_id, 'user': {
+        'username': c.user.username,
+        'avatar': c.user.avatar
+    }})
+
+@app.route('/api/cart/<prod_id>', methods=['put'])
+def update_cart(prod_id):
+    cart = session.get('cart')
+    if cart and prod_id in cart:
+        cart[prod_id]['quantity'] = request.json['quantity']
+        session['cart'] = cart
+    return jsonify(utils.count_cart(cart))
+
+
+@app.route('/api/cart/<prod_id>', methods=['delete'])
+def delete_cart(prod_id):
+    cart = session.get('cart')
+    if cart and prod_id in cart:
+        del cart[prod_id]
+        session['cart'] = cart
+    return jsonify(utils.count_cart(cart))
 
 
 @app.route('/api/carts', methods=['post'])

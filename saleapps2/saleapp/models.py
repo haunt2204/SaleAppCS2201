@@ -1,9 +1,9 @@
-from sqlalchemy import Column, Integer, String, Boolean, Float, ForeignKey, Enum
+from sqlalchemy import Column, Integer, String, Boolean, Float, ForeignKey, Enum, DateTime
 from sqlalchemy.orm import relationship
 from saleapp import app, db
 from flask_login import UserMixin
 from enum import Enum as RoleEnum
-
+from datetime import datetime
 
 class UserEnum(RoleEnum):
     USER = 1
@@ -18,6 +18,8 @@ class User(db.Model, UserMixin):
     active = Column(Boolean, default=True)
     avatar = Column(String(200), default="https://res.cloudinary.com/dy1unykph/image/upload/v1729842193/iPhone_15_Pro_Natural_1_ltf9vr.webp")
     role = Column(Enum(UserEnum), default=UserEnum.USER)
+    receipts = relationship('Receipt', backref='user', lazy=True)
+    comments = relationship('Comment', backref='user', lazy=True)
 
     def __str__(self):
         self.name
@@ -39,14 +41,40 @@ class Product(db.Model):
     image = Column(String(200), default="https://res.cloudinary.com/dy1unykph/image/upload/v1729842193/iPhone_15_Pro_Natural_1_ltf9vr.webp")
     category_id = Column(Integer, ForeignKey(Category.id), nullable=False)
     active = Column(Boolean, default=True)
+    details = relationship('ReceiptDetail', backref='product', lazy=True)
+    comments = relationship('Comment', backref='product', lazy=True)
 
     def __str__(self):
         return self.name
 
 
+class Base(db.Model):
+    __abstract__ = True
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    active = Column(Boolean, default=True)
+    created_date = Column(DateTime, default=datetime.now())
+
+
+class Receipt(Base):
+    user_id = Column(Integer, ForeignKey(User.id), nullable=False)
+    details = relationship('ReceiptDetail', backref="receipt", lazy=True)
+
+
+class ReceiptDetail(Base):
+    quantity = Column(Integer, default=0)
+    unit_price = Column(Float, default=0.0)
+    receipt_id = Column(Integer, ForeignKey(Receipt.id), nullable=False)
+    product_id = Column(Integer, ForeignKey(Product.id), nullable=False)
+
+
+class Comment(Base):
+    content = Column(String(255), nullable=False)
+    user_id = Column(Integer, ForeignKey(User.id), nullable=False)
+    product_id = Column(Integer, ForeignKey(Product.id), nullable=False)
+
 if __name__ == "__main__":
     with app.app_context():
-        # db.create_all()
+        db.create_all()
         # c1 = Category(name="Mobile")
         # c2 = Category(name="Laptop")
         # c3 = Category(name="Tablet")
@@ -59,13 +87,13 @@ if __name__ == "__main__":
         #         prod = Product(**p)
         #         db.session.add(prod)
         #
-        import hashlib
-
-        password = str(hashlib.md5("123".encode('utf-8')).hexdigest())
-
+        # import hashlib
+        #
+        # password = str(hashlib.md5("123".encode('utf-8')).hexdigest())
+        #
         # u = User(name="Hau Nguyen", username="user", password=password)
-        u2 = User(name="Hau Nguyen", username="admin", password=password, role=UserEnum.ADMIN)
+        # u2 = User(name="Hau Nguyen", username="admin", password=password, role=UserEnum.ADMIN)
         # db.session.add(u)
-        db.session.add(u2)
-        db.session.commit()
+        # db.session.add(u2)
+        # db.session.commit()
 

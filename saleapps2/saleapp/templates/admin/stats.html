@@ -1,5 +1,82 @@
 {% extends 'admin/master.html' %}
 
 {% block body %}
-<h1>THONG KE!</h1>
+<h1 class="text-center text-success">THỐNG KÊ</h1>
+<div class="row">
+    <div class="col-md-5 col-12">
+        <table class="table">
+            <tr>
+                <th>Id</th>
+                <th>Tên sản phẩm</th>
+                <th>Doanh thu</th>
+            </tr>
+            {%for c in revenue_product%}
+            <tr>
+                <td>{{c[0]}}</td>
+                <td>{{c[1]}}</td>
+                <td>
+                    {%if c[2]%}
+                    {{"{:,.0f}".format(c[2])}} VND
+                    {%else%}
+                    0 VND
+                    {%endif%}
+                </td>
+            </tr>
+            {%endfor%}
+        </table>
+    </div>
+    <div class="col-md-7 col-12">
+        <canvas id="myChart1"></canvas>
+    </div>
+</div>
+
+<hr class="hr"/>
+<div class="row">
+    <div class="col-md-5 col-12">
+        <table class="table">
+            <tr>
+                <th>Thời gian</th>
+                <th>Doanh thu</th>
+            </tr>
+            {%for c in revenue_period%}
+            <tr>
+                <td>{{c[0]}}</td>
+                <td>{{"{:,.0f}".format(c[1])}} VND</td>
+            </tr>
+            {%endfor%}
+        </table>
+    </div>
+    <div class="col-md-7 col-12">
+        <canvas id="myChart2"></canvas>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{{url_for('static', filename='js/stats.js')}}"></script>
+    <script>
+    let labels = [];
+    let data = [];
+
+    {%for c in revenue_product%}
+        labels.push('{{c[1]}}');
+        {%if c[2]%}
+            data.push({{c[2]}});
+        {%else%}
+            data.push(0);
+        {%endif%}
+    {%endfor%}
+
+    let labels2 = [];
+    let data2 = [];
+
+    {%for c in revenue_period%}
+        labels2.push('{{c[0]}}');
+        data2.push({{c[1]}});
+    {%endfor%}
+
+    window.onload = function(){
+        drawChart('myChart1','bar', labels, data, 'Doanh thu');
+        drawChart('myChart2','bar', labels2, data2, 'Doanh thu');
+    }
+</script>
 {% endblock %}

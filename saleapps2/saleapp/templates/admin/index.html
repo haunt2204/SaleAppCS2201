@@ -1,10 +1,46 @@
 {% extends 'admin/master.html' %}
 
 {% block body %}
+<h1>TRANG QUẢN TRỊ</h1>
 {%if current_user.is_authenticated%}
     <h3>Chao {{current_user.name}}</h3>
+    <div class="row">
+        <div class="col-md-5 col-12">
+            <table class="table">
+                <tr>
+                    <th>Id</th>
+                    <th>Tên danh mục</th>
+                    <th>Số lượng sản phẩm</th>
+                </tr>
+                {%for c in stats%}
+                <tr>
+                    <td>{{c[0]}}</td>
+                    <td>{{c[1]}}</td>
+                    <td>{{c[2]}}</td>
+                </tr>
+                {%endfor%}
+            </table>
+        </div>
+        <div class="col-md-7 col-12">
+            <canvas id="myChart"></canvas>
+        </div>
+    </div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{url_for('static', filename='js/stats.js')}}"></script>
+<script>
+    let labels = [];
+    let data = [];
+
+    {%for c in stats%}
+        labels.push('{{c[1]}}');
+        data.push({{c[2]}});
+    {%endfor%}
+
+    window.onload = function(){
+        drawChart('myChart','pie', labels, data, 'Số lượng');
+    }
+</script>
 {%else%}
-<h1>TRANG QUẢN TRỊ</h1>
 <form method="post" action="/login-admin">
     <div class="form-group mb-3 mt-3">
         <label for="username">Tài khoản</label>

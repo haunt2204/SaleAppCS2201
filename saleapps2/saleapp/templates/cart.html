@@ -14,22 +14,30 @@
             <th></th>
         </tr>
         {%for c in session['cart'].values()%}
-        <tr>
+        <tr id="product{{c.id}}">
             <td>{{c.id}}</td>
             <td>{{c.name}}</td>
-            <td>{{"{:,.0f}".format(c.price)}}</td>
+            <td>{{"{:,.0f}".format(c.price)}} VND</td>
             <td>
-                <input type="number" value="{{c.quantity}}" class="form-control">
+                <input type="number" onblur="updateCart({{c.id}}, this)" value="{{c.quantity}}" class="form-control">
             </td>
             <td>
-                <button class="btn btn-danger">&times;</button>
+                <button class="btn btn-danger" onclick="deleteCart({{c.id}})">&times;</button>
             </td>
             <td></td>
         </tr>
         {%endfor%}
 
     </table>
-    <button class="btn btn-success">Thanh toán</button>
+    <div class="alert alert-info">
+        <h4>Tổng số lượng: <span class="class-counter">{{stats_cart.total_quantity}}</span></h4>
+        <h4>Tổng tiền thanh toán: <span class="class-amount">{{"{:,.0f}".format(stats_cart.total_amount)}} VND</span></h4>
+    </div>
+    {%if current_user.is_authenticated%}
+    <button class="btn btn-success" onclick="pay()">Thanh toán</button>
+    {%else%}
+    <div>Vui lòng <a href="/login?next=/cart">đăng nhập</a> để thanh toán!</div>
+    {%endif%}
 {%else%}
 <div class="alert alert-info">Không có sản phẩm trong giỏ hàng!</div>
 {%endif%}
