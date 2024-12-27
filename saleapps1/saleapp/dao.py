@@ -36,13 +36,10 @@ def load_products(q=None, cate_id=None, page=None):
 
 def add_user(name, username, password, avatar):
     password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
-    u = None
-    if avatar:
-        u = User(name=name, username=username, password=password, avatar=avatar)
-    else:
-        u = User(name=name, username=username, password=password)
+    u = User(name=name, username=username, password=password, avatar=avatar)
     db.session.add(u)
     db.session.commit()
+
 
 def count_products():
     return Product.query.count()

@@ -1,6 +1,6 @@
 import math
-from flask import render_template, request, redirect
-import dao
+from flask import render_template, request, redirect, session, jsonify
+import dao, utils
 from saleapp import app,admin, login
 from flask_login import login_user, logout_user, current_user
 import cloudinary.uploader
@@ -21,6 +21,60 @@ def index():
 def details(id):
     product = dao.load_product_by_id(id)
     return render_template('product-details.html', product = product)
+
+
+@app.route('/admin-login', methods=['post'])
+def process_admin_login():
+    username = request.form.get('username')
+    password = request.form.get('password')
+    user = dao.auth_user(username, password)
+    if user:
+        login_user(user)
+
+    return redirect('/admin')
+
+
+@app.route("/api/carts", methods=["post"])
+def add_to_cart():
+    """
+    {
+        "cart": {
+            "1": {
+                "id": 1,
+                "name": "",
+                "price": "...",
+                "quantity": 3
+            },
+            "2": {
+                "id": 2,
+                "name": "",
+                "price": "...",
+                "quantity": 1
+            }
+        }
+    }
+    :return:
+    """
+    cart = session.get("cart")
+
+    if not cart:
+        cart = {}
+
+    id = str(request.json.get('id'))
+
+    if id in cart:
+        cart[id]['quantity'] += 1
+    else:
+        cart[id] = {
+            "id": id,
+            "name": request.json.get('name'),
+            "price": request.json.get('price'),
+            "quantity": 1
+        }
+
+    session['cart'] = cart
+
+    return jsonify(utils.count_cart(cart))
 
 
 @app.route('/login', methods=['get', 'post'])
@@ -78,8 +132,13 @@ def load_user(user_id):
 @app.context_processor
 def common_attributes():
     return {
-        "categories": dao.load_categories()
+        "categories": dao.load_categories(),
+        "stats_cart": utils.count_cart(session.get('cart'))
     }
+
+@app.route('/cart')
+def cart():
+    return render_template('cart.html')
 
 if __name__ == "__main__":
     with app.app_context():
