@@ -34,6 +34,26 @@ def process_admin_login():
     return redirect('/admin')
 
 
+@app.route("/api/cart/<prod_id>", methods=['put'])
+def update_cart(prod_id):
+    cart = session.get('cart')
+    if cart and prod_id in cart:
+        cart[prod_id]['quantity'] = request.json.get('quantity')
+        session['cart'] = cart
+
+    return jsonify(utils.count_cart(cart))
+
+
+@app.route("/api/cart/<prod_id>", methods=['delete'])
+def delete_cart(prod_id):
+    cart = session.get('cart')
+    if cart and prod_id in cart:
+        del cart[prod_id]
+        session['cart'] = cart
+
+    return jsonify(utils.count_cart(cart))
+
+
 @app.route("/api/carts", methods=["post"])
 def add_to_cart():
     """
@@ -43,7 +63,7 @@ def add_to_cart():
                 "id": 1,
                 "name": "",
                 "price": "...",
-                "quantity": 3
+                "quantity": 2
             },
             "2": {
                 "id": 2,
@@ -73,7 +93,7 @@ def add_to_cart():
         }
 
     session['cart'] = cart
-
+    print(session)
     return jsonify(utils.count_cart(cart))
 
 
@@ -89,7 +109,8 @@ def login_my_user():
         user = dao.auth_user(username,password)
         if user:
             login_user(user)
-            return redirect('/')
+            next = request.args.get('next')
+            return redirect(next if next else '/')
         else:
             err_msg = "Tài khoản hoặc mật khẩu không đúng!"
 
@@ -139,6 +160,23 @@ def common_attributes():
 @app.route('/cart')
 def cart():
     return render_template('cart.html')
+
+
+@app.route('/api/pay', methods=['post'])
+def pay():
+    cart = session.get('cart')
+    try:
+        dao.add_receipt(cart=cart)
+    except Exception as ex:
+        print(ex)
+        return jsonify({
+            'status': 500
+        })
+    else:
+        del session['cart']
+        return jsonify({
+            'status': 200
+        })
 
 if __name__ == "__main__":
     with app.app_context():

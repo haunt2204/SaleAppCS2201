@@ -7,7 +7,7 @@
 {%if err_msg%}
 <div class="alert alert-danger">{{err_msg}}</div>
 {%endif%}
-<form method="post" action="/login">
+<form method="post">
     <div class="form-floating mb-3 mt-3">
         <input type="text" class="form-control" id="username" placeholder="Nhập tài khoản" name="username" pattern="[A-Za-z0-9]*" required>
         <label for="username">Tài khoản</label>

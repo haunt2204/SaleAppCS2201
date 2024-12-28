@@ -1,13 +1,14 @@
 from flask import redirect
-from flask_admin import Admin, expose
+from flask_admin import Admin, expose, AdminIndexView
 from flask_admin.contrib.sqla import ModelView
 from flask_admin import BaseView
 from models import Category, Product, UserEnum
-from saleapp import app, db
+from saleapp import app, db, dao
 from flask_login import logout_user, current_user
 
 
-admin = Admin(app, name="E-commerce Website", template_mode="bootstrap4")
+
+
 
 class BaseModelView(ModelView):
     def is_visible(self):
@@ -40,6 +41,14 @@ class AdminLogout(BaseView):
         return redirect('/admin')
 
 
+class MyAdminIndexView(AdminIndexView):
+    @expose('/')
+    def index(self):
+        stats = dao.count_product_by_cate()
+        return self.render("admin/index.html", stats=stats)
+
+
+admin = Admin(app, name="E-commerce Website", template_mode="bootstrap4", index_view=MyAdminIndexView())
 admin.add_view(MyCategoryView(Category, db.session))
 admin.add_view(MyProductView(Product, db.session))
 admin.add_view(MyStatsView("Thống kê"))
